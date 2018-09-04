@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Hour;
+use App\State;
 use Illuminate\Http\Request;
 
-class HourController extends Controller
+class StateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class HourController extends Controller
      */
     public function index()
     {
-        return response()->json(Hour::all(),200);
+        //
     }
 
     /**
@@ -41,10 +41,10 @@ class HourController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Hour  $hour
+     * @param  \App\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function show(Hour $hour)
+    public function show(State $state)
     {
         //
     }
@@ -52,10 +52,10 @@ class HourController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Hour  $hour
+     * @param  \App\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function edit(Hour $hour)
+    public function edit(State $state)
     {
         //
     }
@@ -64,10 +64,10 @@ class HourController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Hour  $hour
+     * @param  \App\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Hour $hour)
+    public function update(Request $request, State $state)
     {
         //
     }
@@ -75,10 +75,10 @@ class HourController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Hour  $hour
+     * @param  \App\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hour $hour)
+    public function destroy(State $state)
     {
         //
     }

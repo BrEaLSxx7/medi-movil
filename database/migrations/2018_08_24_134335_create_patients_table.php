@@ -20,7 +20,7 @@ class CreatePatientsTable extends Migration
             $table->integer('tipo_documento')->unsigned();
             $table->string('numero_documento', 30)->unique();
             $table->string('correo', 50)->unique();
-            $table->string('foto', 50);
+            $table->string('foto', 100);
             $table->timestamps();
 
             $table->foreign('tipo_documento')->references('id')->on('document_types')->onDelete('cascade')->onUpdate('cascade');

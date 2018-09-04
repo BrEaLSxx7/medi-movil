@@ -83,13 +83,13 @@ class AuthenticationController extends Controller {
         try {
             $auth = Authentication::where('usuario', $request->usuario)->firstOrFail();
             if (Hash::check($request->contrasena, $auth->contrasena)) {
-                if ($request->id_medico !== null) {
-                    $data = Medic::where('id', $request->id_medico)->firstOrFail();
+                if ($auth->id_medico !== null) {
+                    $data = Medic::where('id', $auth->id_medico)->firstOrFail();
                 } else {
-                    $data = Patient::where('id', $request->id_paciente)->firstOrFail();
+                    $data = Patient::where('id', $auth->id_paciente)->firstOrFail();
                 }
                 $data['rol'] = $auth->id_rol;
-                return response()->json($data, 200);
+                return response()->json(['datos'=>$data,'message'=>'Sesión iniciada'], 200);
             } else {
                 return response()->json(['message' => 'Datos incorrectos'], 401);
             }

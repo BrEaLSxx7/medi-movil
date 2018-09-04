@@ -14,3 +14,15 @@ use Illuminate\Http\Request;
  */
 
 Route::post('auth', 'AuthenticationController@auth');
+Route::post('img', 'MedicController@img');
+Route::post('img', 'PatientController@img');
+Route::put('amedico', 'MedicController@upd');
+Route::put('apaciente', 'PatientController@upd');
+Route::put('adate', 'DateController@upd');
+Route::apiResource('paciente', 'PatientController');
+Route::apiResource('medico', 'MedicController');
+Route::apiResource('horario', 'HourController');
+Route::apiResource('cita', 'DateController');
+Route::apiResource('calificacion', 'QualificationController');
+Route::apiResource('tpd', 'DocumentTypeController');
+Route::apiResource('cancelar','CancelController');

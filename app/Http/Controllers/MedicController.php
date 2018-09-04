@@ -15,7 +15,7 @@ class MedicController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        return response()->json(Medic::all(), 200);
     }
 
     /**
@@ -41,10 +41,12 @@ class MedicController extends Controller {
                 'foto' => 'required|image',
                 'tipo_id' => 'required|integer',
                 'numero_documento' => 'required|string|max:30',
-                'telefono' => 'required|integer|max:90000000000',
+                'telefono' => 'required|integer',
                 'correo' => 'required|email',
-                'precio' => 'required|float',
-                'descripcion' => 'required|string|max:143'
+                'precio' => 'required|between:0,499999.99',
+                'descripcion' => 'required|string|max:143',
+                'usuario' => 'required|string|unique:authentications',
+                'contrasena' => 'required|string'
                     ], [
                 'nombre.required' => 'El campo nombre es requerido',
                 'nombre.string' => 'El campo debe estar en un formato válido',
@@ -57,15 +59,19 @@ class MedicController extends Controller {
                 'numero_documento.string' => 'El campo debe estar en un formato válido',
                 'numero_documento.max' => 'El campo tiene demasiados carácteres',
                 'telefono.required' => 'El campo telefono es requerido',
-                'telefono.string' => 'El campo debe estar en un formato válido',
-                'telefono.max' => 'El campo tiene demasiados carácteres',
+                'telefono.integer' => 'El campo debe estar en un formato válido',
                 'correo.required' => 'El campo correo es requerido',
                 'correo.email' => 'El campo debe estar en un formato válido',
                 'precio.required' => 'El campo correo es requerido',
-                'precio.float' => 'El campo debe estar en un formato válido',
+                'precio.between' => 'El campo debe estar en un formato válido',
                 'descripcion.required' => 'El campo nombre es requerido',
                 'descripcion.string' => 'El campo debe estar en un formato válido',
-                'descripcion.max' => 'El campo tiene demasiados carácteres'
+                'descripcion.max' => 'El campo tiene demasiados carácteres',
+                'usuario.required' => 'El campo nombre es requerido',
+                'usuario.string' => 'El campo debe estar en un formato válido',
+                'usuario.unique' => 'El usuario ya se encuentra registrado',
+                'contrasena.required' => 'El campo nombre es requerido',
+                'contrasena.string' => 'El campo debe estar en un formato válido',
             ]);
 
             if ($request->hasFile('foto')) {
@@ -73,7 +79,7 @@ class MedicController extends Controller {
                 $nameImagen = time() . $request->file('foto')->getClientOriginalName();
                 $request->file('foto')->move('./../files/', $nameImagen);
                 $medic->nombre = $request->nombre;
-                $medic->tipo_documento_id = $request->tipo_id;
+                $medic->tipo_documento = $request->tipo_id;
                 $medic->numero_documento = $request->numero_documento;
                 $medic->telefono = $request->telefono;
                 $medic->correo = $request->correo;
@@ -125,7 +131,7 @@ class MedicController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Medic $medic) {
-        //
+        
     }
 
     /**
@@ -137,5 +143,50 @@ class MedicController extends Controller {
     public function destroy(Medic $medic) {
         //
     }
-
+    
+    public function img(Request $request) {
+        try {
+            if ($request->hasFile('foto')){
+                $medic= Medic::where('id',$request->id)->firstOrFail();
+                $nameImagen= time().$request->file('foto')->getClientOriginalName();
+                $request->file('foto')->move('./../files/',$nameImagen);
+                $medic->foto=$nameImagen;
+                $medic->saveOrFail();
+                return response()->json(['message' => 'Actualizado correctamente', 'datos' => $medic], 200);
+            } else {
+                return response()->json(['message' => 'El campo foto es requerido'], 400);
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+            return response()->json(['message' => $ex->getMessage()], 500);
+        }
+    }
+    public function upd(Request $request) {
+        $request->validate([
+            'correo' => 'required|email',
+            'telefono' => 'required|integer|max:9999999999',
+            'descripcion' => 'required|string|max:143',
+            'precio' => 'required|between:0,499999.99'
+                ], [
+            'telefono.required' => 'El campo Telefono es requerido',
+            'telefono.integer' => 'El Campo Debe estar en un formato valido',
+            'correo.required' => 'El campo correo es requerido',
+            'correo.email' => 'El campo debe estar en un formato válido',
+            'precio.required' => 'El campo precio es requerido',
+            'precio.between' => 'El campo debe estar en un formato válido',
+            'descripcion.required' => 'El campo descripcion es requerido',
+            'descripcion.string' => 'El campo debe estar en un formato válido',
+            'descripcion.max' => 'El campo tiene demasiados carácteres',
+        ]);
+        try {
+            $medic= Medic::where('id',$request->id)->firstOrFail();
+            $medic->telefono = $request->telefono;
+            $medic->correo = $request->correo;
+            $medic->precio = $request->precio;
+            $medic->descripcion = $request->descripcion;
+            $medic->saveOrFail();
+            return response()->json(['message' => 'Actualizado correctamente', 'datos' => $medic], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+            return response()->json(['message' => $ex->getMessage()], 500);
+        }
+    }
 }

@@ -14,14 +14,16 @@ class CreateDatesTable extends Migration {
     public function up() {
         Schema::create('dates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('id_medico', 30)->unique();
+            $table->integer('id_medico')->unsigned();
             $table->integer('id_paciente')->unsigned();
-            $table->boolean('estado');
+            $table->integer('estado')->unsigned();
             $table->timeStamp('fecha');
             $table->integer('id_hora')->unsigned();
             $table->timestamps();
 
             $table->foreign('id_paciente')->references('id')->on('patients')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_medico')->references('id')->on('medics')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('estado')->references('id')->on('States')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('id_hora')->references('id')->on('hours')->onDelete('cascade')->onUpdate('cascade');
         });
     }

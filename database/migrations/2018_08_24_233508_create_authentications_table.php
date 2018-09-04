@@ -15,7 +15,7 @@ class CreateAuthenticationsTable extends Migration {
         Schema::create('authentications', function (Blueprint $table) {
             $table->increments('id');
             $table->string('usuario', 50)->unique();
-            $table->string('contrasena', 30)->unique();
+            $table->string('contrasena', 60);
             $table->integer('id_paciente')->unsigned()->nullable();
             $table->integer('id_rol')->unsigned();
             $table->integer('id_medico')->unsigned()->nullable();
